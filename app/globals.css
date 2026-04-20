@@ -1,0 +1,114 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: #07080F;
+  --panel: #11131F;
+  --panel-2: #161927;
+  --surface: #0C0E18;
+  --line: rgba(255, 255, 255, 0.08);
+  --line-strong: rgba(255, 255, 255, 0.14);
+  --heading: #F1F3F8;
+  --body: #B4BCCC;
+  --muted: #7C869A;
+  --violet: #635BFF;
+  --violet-2: #7AC3FF;
+}
+
+html { -webkit-text-size-adjust: 100%; background: var(--bg); }
+body {
+  background: var(--bg);
+  color: var(--body);
+  font-feature-settings: "ss01", "cv11";
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  position: relative;
+  min-height: 100vh;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -10;
+  pointer-events: none;
+  background:
+    radial-gradient(900px 600px at 12% -10%, rgba(99, 91, 255, 0.22), transparent 60%),
+    radial-gradient(700px 500px at 92% 10%, rgba(122, 195, 255, 0.14), transparent 60%),
+    radial-gradient(800px 600px at 50% 110%, rgba(99, 91, 255, 0.12), transparent 60%);
+}
+
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -9;
+  pointer-events: none;
+  opacity: 0.35;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: radial-gradient(ellipse 80% 60% at 50% 30%, #000 30%, transparent 75%);
+  -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 30%, #000 30%, transparent 75%);
+}
+
+*:focus-visible {
+  outline: 2px solid var(--violet);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+::selection { background: var(--violet); color: white; }
+
+/* Token remap — dark theme */
+.bg-white { background-color: var(--panel) !important; }
+.bg-white\/80 { background-color: rgba(17, 19, 31, 0.72) !important; backdrop-filter: blur(14px) saturate(140%); }
+.bg-white\/5 { background-color: rgba(255, 255, 255, 0.05) !important; }
+.bg-surface { background-color: var(--surface) !important; }
+.bg-navy { background-color: #06070C !important; }
+.text-navy { color: var(--heading) !important; }
+.text-slate-body { color: var(--body) !important; }
+.text-slate-muted { color: var(--muted) !important; }
+.border-slate-line { border-color: var(--line) !important; }
+.hover\:border-navy\/30:hover { border-color: var(--line-strong) !important; }
+.hover\:border-navy\/20:hover { border-color: var(--line-strong) !important; }
+.hover\:text-navy:hover { color: var(--heading) !important; }
+.focus\:bg-navy:focus { background-color: var(--violet) !important; color: #fff !important; }
+
+/* Cards: subtle glass + border glow */
+.bg-white,
+.bg-white\/80 {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    0 1px 0 rgba(0, 0, 0, 0.4),
+    0 12px 40px -12px rgba(0, 0, 0, 0.6) !important;
+}
+
+/* Inputs */
+input.bg-white, textarea.bg-white {
+  background-color: rgba(255, 255, 255, 0.03) !important;
+  color: var(--heading) !important;
+  box-shadow: none !important;
+}
+input.bg-white::placeholder, textarea.bg-white::placeholder { color: var(--muted) !important; }
+
+/* Custom shadow override — make `shadow-card` actually pop on dark */
+.shadow-card {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    0 1px 0 rgba(0, 0, 0, 0.5),
+    0 18px 48px -16px rgba(0, 0, 0, 0.7) !important;
+}
+
+/* Dotted/dashed accents pop on dark */
+.border-dashed { border-style: dashed; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+  body::before, body::after { display: none; }
+}
