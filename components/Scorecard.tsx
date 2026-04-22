@@ -5,9 +5,9 @@ import { Check, X } from "lucide-react";
 
 const PLATFORMS = ["ChatGPT", "Gemini", "Claude", "Perplexity"];
 const ROWS: Array<{ name: string; results: Array<0 | 1>; rate: number }> = [
-  { name: "Tenge Law Firm", results: [1, 1, 1, 1], rate: 92 },
-  { name: "Jeffress Law", results: [1, 1, 0, 1], rate: 78 },
-  { name: "Sloat Nicholson", results: [1, 0, 1, 1], rate: 71 },
+  { name: "Ridgeline Law", results: [1, 1, 1, 1], rate: 92 },
+  { name: "Foothill & Park", results: [1, 1, 0, 1], rate: 78 },
+  { name: "Blue Spruce Legal", results: [1, 0, 1, 1], rate: 71 },
   { name: "Your firm", results: [0, 0, 0, 0], rate: 0 },
 ];
 
