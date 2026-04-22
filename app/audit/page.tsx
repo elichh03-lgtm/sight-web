@@ -50,7 +50,7 @@ export default function AuditPage() {
           </Reveal>
           <Reveal kind="default">
             <div className="mt-10 rounded-2xl bg-surface border border-line px-5 py-4 text-[14px] leading-[1.6] text-ink max-w-[56ch]">
-              <span className="font-medium">Investment:</span> $500–$1,500 one-time, scoped
+              <span className="font-medium">Investment:</span> $1,500–$2,000 one-time, scoped
               to your market and competitive set. The 20-minute preview is free.
             </div>
           </Reveal>

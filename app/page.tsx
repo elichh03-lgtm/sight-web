@@ -242,7 +242,7 @@ export default function HomePage() {
             <PricingCard
               featured
               name="AI Visibility Audit"
-              price="$500–$1,500"
+              price="$1,500–$2,000"
               cadence="one-time"
               tagline="The entry point. Most engagements start here."
               bullets={[
@@ -268,7 +268,7 @@ export default function HomePage() {
             />
             <PricingCard
               name="Ongoing Retainer"
-              price="$1,500–$3,000"
+              price="$2,000–$4,000"
               cadence="per month"
               tagline="Monthly work and reporting once visibility is moving."
               bullets={[
