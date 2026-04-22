@@ -4,12 +4,15 @@ import { AnimatePresence, motion } from "framer-motion";
 import { ArrowRight, Check, Loader2 } from "lucide-react";
 import { Field, inputBase, textareaBase } from "./Field";
 
-type FieldErrors = Partial<Record<"name" | "business" | "website" | "email" | "notes" | "_", string>>;
+type FieldErrors = Partial<
+  Record<"name" | "business" | "website" | "email" | "notes" | "_", string>
+>;
 
 export function AuditForm() {
   const [errors, setErrors] = useState<FieldErrors>({});
   const [pending, setPending] = useState(false);
   const [done, setDone] = useState(false);
+  const [requestId, setRequestId] = useState<string | null>(null);
   const [serverError, setServerError] = useState<string | null>(null);
   const formRef = useRef<HTMLFormElement>(null);
 
@@ -35,14 +38,19 @@ export function AuditForm() {
           setErrors(json.fieldErrors as FieldErrors);
           const first = Object.keys(json.fieldErrors)[0];
           if (first) {
-            const el = formRef.current?.querySelector<HTMLInputElement>(`[name="${first}"]`);
+            const el = formRef.current?.querySelector<HTMLInputElement>(
+              `[name="${first}"]`
+            );
             el?.focus();
           }
+        } else if (res.status === 429) {
+          setServerError("Too many requests — try again in a moment.");
         } else {
           setServerError(json.error || "Something went wrong. Please try again.");
         }
         return;
       }
+      setRequestId(json.id || null);
       setDone(true);
     } catch {
       setServerError("Network error. Please try again.");
@@ -52,7 +60,7 @@ export function AuditForm() {
   }
 
   return (
-    <div className="rounded-xl border border-slate-line bg-white p-6 sm:p-8 shadow-card">
+    <div className="rounded-2xl border border-line bg-card p-6 lg:p-8">
       <AnimatePresence mode="wait" initial={false}>
         {done ? (
           <motion.div
@@ -61,15 +69,28 @@ export function AuditForm() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-            className="py-4"
+            className="py-6 text-center"
           >
-            <div className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-violet/10 text-violet mb-4">
+            <div className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-oxblood/10 text-oxblood mb-5">
               <Check className="h-5 w-5" aria-hidden="true" />
             </div>
-            <h2 className="text-navy font-semibold text-[20px] tracking-tight">Got it. We&rsquo;ll be in touch.</h2>
-            <p className="mt-2 text-[15px] leading-[1.6] text-slate-body">
-              You&rsquo;ll hear back within one business day with your audit preview details.
+            <h2 className="font-display text-[24px] tracking-[-0.01em] font-medium text-ink">
+              Request received.
+            </h2>
+            <p className="mt-3 text-[15px] leading-[1.6] text-muted">
+              We&rsquo;ve got it. You&rsquo;ll hear back within one business day.
             </p>
+            {requestId && (
+              <p className="mt-4 text-[11px] font-mono uppercase tracking-[0.08em] text-muted">
+                Request ID: {requestId}
+              </p>
+            )}
+            <a
+              href="/"
+              className="mt-6 inline-block text-[14px] text-ink hover:text-oxblood underline underline-offset-4"
+            >
+              Back to home
+            </a>
           </motion.div>
         ) : (
           <motion.form
@@ -82,7 +103,14 @@ export function AuditForm() {
             className="space-y-5"
             aria-busy={pending}
           >
-            <input type="text" name="hp" tabIndex={-1} autoComplete="off" aria-hidden="true" className="hidden" />
+            <input
+              type="text"
+              name="hp"
+              tabIndex={-1}
+              autoComplete="off"
+              aria-hidden="true"
+              className="hidden"
+            />
             <Field id="name" label="Your name" required error={errors.name}>
               <input
                 id="name"
@@ -104,7 +132,13 @@ export function AuditForm() {
                 aria-invalid={!!errors.business}
               />
             </Field>
-            <Field id="website" label="Website" required hint="We&rsquo;ll add https:// for you if you forget it." error={errors.website}>
+            <Field
+              id="website"
+              label="Website"
+              required
+              hint="We'll add https:// for you if you forget it."
+              error={errors.website}
+            >
               <input
                 id="website"
                 name="website"
@@ -126,12 +160,26 @@ export function AuditForm() {
                 aria-invalid={!!errors.email}
               />
             </Field>
-            <Field id="notes" label="Anything we should know?" hint="Optional. Top competitors, target market, anything specific." error={errors.notes}>
-              <textarea id="notes" name="notes" className={textareaBase} aria-invalid={!!errors.notes} />
+            <Field
+              id="notes"
+              label="Anything we should know?"
+              hint="Optional. Top competitors, target market, anything specific."
+              error={errors.notes}
+            >
+              <textarea
+                id="notes"
+                name="notes"
+                className={textareaBase}
+                aria-invalid={!!errors.notes}
+              />
             </Field>
 
             {serverError && (
-              <p role="alert" className="rounded-md border border-[#FCA5A5] bg-[#FEF2F2] px-3 py-2 text-[13px] text-[#991B1B]">
+              <p
+                role="alert"
+                aria-live="polite"
+                className="rounded-md border border-error bg-error/10 px-3 py-2 text-[13px] text-error"
+              >
                 {serverError}
               </p>
             )}
@@ -139,21 +187,21 @@ export function AuditForm() {
             <button
               type="submit"
               disabled={pending}
-              className="group inline-flex h-11 items-center justify-center gap-2 rounded-md bg-violet px-5 text-[15px] font-semibold text-white shadow-[0_8px_20px_-8px_rgba(99,91,255,0.6)] transition-all duration-200 hover:bg-violet-600 hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-60 disabled:translate-y-0 disabled:cursor-not-allowed"
+              className="inline-flex w-full h-11 items-center justify-center gap-2 rounded-md bg-oxblood px-5 text-[15px] font-medium text-white transition-[transform,background-color] duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] hover:bg-oxblood-600 hover:-translate-y-[1px] disabled:opacity-60 disabled:translate-y-0 disabled:cursor-not-allowed"
             >
               {pending ? (
                 <>
                   <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
-                  Sending&hellip;
+                  Sending…
                 </>
               ) : (
                 <>
-                  Request my audit
-                  <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" aria-hidden="true" />
+                  Request preview
+                  <ArrowRight className="h-4 w-4" aria-hidden="true" />
                 </>
               )}
             </button>
-            <p className="text-[12.5px] text-slate-muted">
+            <p className="text-[12.5px] text-muted">
               No spam. We use this only to scope your audit and reach out.
             </p>
           </motion.form>

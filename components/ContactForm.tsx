@@ -33,9 +33,13 @@ export function ContactForm() {
           setErrors(json.fieldErrors as FieldErrors);
           const first = Object.keys(json.fieldErrors)[0];
           if (first) {
-            const el = formRef.current?.querySelector<HTMLInputElement>(`[name="${first}"]`);
+            const el = formRef.current?.querySelector<HTMLInputElement>(
+              `[name="${first}"]`
+            );
             el?.focus();
           }
+        } else if (res.status === 429) {
+          setServerError("Too many requests — try again in a moment.");
         } else {
           setServerError(json.error || "Something went wrong. Please try again.");
         }
@@ -50,7 +54,7 @@ export function ContactForm() {
   }
 
   return (
-    <div className="rounded-xl border border-slate-line bg-white p-6 sm:p-8 shadow-card">
+    <div className="rounded-2xl border border-line bg-card p-6 lg:p-8">
       <AnimatePresence mode="wait" initial={false}>
         {done ? (
           <motion.div
@@ -59,14 +63,16 @@ export function ContactForm() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-            className="py-4"
+            className="py-6 text-center"
           >
-            <div className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-violet/10 text-violet mb-4">
+            <div className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-oxblood/10 text-oxblood mb-5">
               <Check className="h-5 w-5" aria-hidden="true" />
             </div>
-            <h2 className="text-navy font-semibold text-[20px] tracking-tight">Message received.</h2>
-            <p className="mt-2 text-[15px] leading-[1.6] text-slate-body">
-              We reply within one business day.
+            <h2 className="font-display text-[24px] tracking-[-0.01em] font-medium text-ink">
+              Message received.
+            </h2>
+            <p className="mt-3 text-[15px] leading-[1.6] text-muted">
+              We&rsquo;ve got it. You&rsquo;ll hear back within one business day.
             </p>
           </motion.div>
         ) : (
@@ -80,19 +86,51 @@ export function ContactForm() {
             className="space-y-5"
             aria-busy={pending}
           >
-            <input type="text" name="hp" tabIndex={-1} autoComplete="off" aria-hidden="true" className="hidden" />
+            <input
+              type="text"
+              name="hp"
+              tabIndex={-1}
+              autoComplete="off"
+              aria-hidden="true"
+              className="hidden"
+            />
             <Field id="cname" label="Your name" required error={errors.name}>
-              <input id="cname" name="name" required autoComplete="name" className={inputBase} aria-invalid={!!errors.name} />
+              <input
+                id="cname"
+                name="name"
+                required
+                autoComplete="name"
+                className={inputBase}
+                aria-invalid={!!errors.name}
+              />
             </Field>
             <Field id="cemail" label="Email" required error={errors.email}>
-              <input id="cemail" name="email" type="email" required autoComplete="email" className={inputBase} aria-invalid={!!errors.email} />
+              <input
+                id="cemail"
+                name="email"
+                type="email"
+                required
+                autoComplete="email"
+                className={inputBase}
+                aria-invalid={!!errors.email}
+              />
             </Field>
             <Field id="cmessage" label="Message" required error={errors.message}>
-              <textarea id="cmessage" name="message" required className={textareaBase} aria-invalid={!!errors.message} />
+              <textarea
+                id="cmessage"
+                name="message"
+                required
+                className={textareaBase}
+                aria-invalid={!!errors.message}
+              />
             </Field>
 
             {serverError && (
-              <p role="alert" className="rounded-md border border-[#FCA5A5] bg-[#FEF2F2] px-3 py-2 text-[13px] text-[#991B1B]">
+              <p
+                role="alert"
+                aria-live="polite"
+                className="rounded-md border border-error bg-error/10 px-3 py-2 text-[13px] text-error"
+              >
                 {serverError}
               </p>
             )}
@@ -100,17 +138,17 @@ export function ContactForm() {
             <button
               type="submit"
               disabled={pending}
-              className="group inline-flex h-11 items-center justify-center gap-2 rounded-md bg-violet px-5 text-[15px] font-semibold text-white shadow-[0_8px_20px_-8px_rgba(99,91,255,0.6)] transition-all duration-200 hover:bg-violet-600 hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-60 disabled:translate-y-0 disabled:cursor-not-allowed"
+              className="inline-flex w-full h-11 items-center justify-center gap-2 rounded-md bg-oxblood px-5 text-[15px] font-medium text-white transition-[transform,background-color] duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] hover:bg-oxblood-600 hover:-translate-y-[1px] disabled:opacity-60 disabled:translate-y-0 disabled:cursor-not-allowed"
             >
               {pending ? (
                 <>
                   <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
-                  Sending&hellip;
+                  Sending…
                 </>
               ) : (
                 <>
                   Send message
-                  <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" aria-hidden="true" />
+                  <ArrowRight className="h-4 w-4" aria-hidden="true" />
                 </>
               )}
             </button>

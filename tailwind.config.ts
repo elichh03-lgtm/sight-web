@@ -5,31 +5,33 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        navy: {
-          DEFAULT: "#0A2540",
-          50: "#F2F5F9",
-          900: "#0A2540",
+        canvas: "#E8E8E8",
+        surface: "#F4F4F4",
+        card: "#FFFFFF",
+        ink: "#222222",
+        muted: "rgba(34, 34, 34, 0.60)",
+        line: "rgba(34, 34, 34, 0.10)",
+        lineStrong: "rgba(34, 34, 34, 0.18)",
+        oxblood: {
+          DEFAULT: "#8B1F1F",
+          600: "#7A1A1A",
+          soft: "rgba(139, 31, 31, 0.10)",
         },
-        violet: {
-          DEFAULT: "#635BFF",
-          600: "#5851EA",
-          700: "#4B45C7",
-        },
-        surface: "#F6F9FC",
-        slate: {
-          body: "#3C4858",
-          muted: "#5B6B82",
-          line: "#E3E8EF",
-        },
+        tintPeach: "#F2E6DA",
+        tintSage: "#E6EDE4",
+        tintSky: "#DFE6F1",
+        error: "#D93025",
+        success: "#2F7D4C",
+        warning: "#D68E1C",
       },
       fontFamily: {
-        sans: ["var(--font-inter)", "ui-sans-serif", "system-ui", "sans-serif"],
+        sans: ["var(--font-inter)", "system-ui", "sans-serif"],
+        display: ["var(--font-inter-tight)", "var(--font-inter)", "system-ui", "sans-serif"],
+        serif: ['"Iowan Old Style"', '"Palatino Linotype"', "Palatino", "Georgia", "serif"],
+        mono: ["ui-monospace", "SFMono-Regular", "Menlo", "monospace"],
       },
       maxWidth: {
-        container: "1120px",
-      },
-      boxShadow: {
-        card: "0 1px 2px rgba(10,37,64,0.04), 0 4px 16px rgba(10,37,64,0.06)",
+        container: "1200px",
       },
     },
   },

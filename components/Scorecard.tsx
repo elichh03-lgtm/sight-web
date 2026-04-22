@@ -19,31 +19,41 @@ export function Scorecard() {
   return (
     <div
       ref={ref}
-      className="rounded-2xl border border-slate-line bg-white shadow-card overflow-hidden"
+      className="rounded-2xl border border-line bg-card overflow-hidden"
     >
-      <div className="flex items-center justify-between border-b border-slate-line px-5 py-3">
+      <div className="flex items-center justify-between border-b border-line px-5 py-3">
         <div className="flex items-center gap-2">
-          <span className="h-2 w-2 rounded-full bg-violet shadow-[0_0_10px_rgba(99,91,255,0.8)]" />
-          <span className="text-[13px] font-medium text-navy">Visibility scorecard</span>
+          <span className="h-2 w-2 rounded-full bg-oxblood" />
+          <span className="text-[13px] font-medium text-ink">Visibility scorecard</span>
         </div>
-        <span className="text-[11px] font-mono text-slate-muted tracking-wider uppercase">Boulder · Personal Injury</span>
+        <span className="text-[11px] font-mono text-muted tracking-[0.08em] uppercase">
+          Boulder · Personal Injury
+        </span>
       </div>
       <div className="p-5">
-        <div className="grid grid-cols-[1.4fr_repeat(4,minmax(0,1fr))_auto] gap-x-3 gap-y-2 items-center text-[12.5px]">
-          <span className="text-slate-muted">Firm</span>
+        <div className="grid grid-cols-[1.4fr_repeat(4,minmax(0,1fr))_auto] gap-x-3 gap-y-3 items-center text-[12.5px]">
+          <span className="text-muted">Firm</span>
           {PLATFORMS.map((p) => (
-            <span key={p} className="text-center text-slate-muted">{p}</span>
+            <span key={p} className="text-center text-muted">
+              {p}
+            </span>
           ))}
-          <span className="text-right text-slate-muted pl-2">Score</span>
+          <span className="text-right text-muted pl-2">Score</span>
 
           {ROWS.map((row, ri) => (
-            <RowCells key={row.name} row={row} ri={ri} inView={inView} reduce={!!reduce} />
+            <RowCells
+              key={row.name}
+              row={row}
+              ri={ri}
+              inView={inView}
+              reduce={!!reduce}
+            />
           ))}
         </div>
       </div>
-      <div className="border-t border-slate-line bg-surface px-5 py-3 flex items-center justify-between text-[12px]">
-        <span className="text-slate-muted">30 prompts · 4 platforms · pulled live</span>
-        <span className="text-violet font-medium">Top 3 own 100% of recommendations</span>
+      <div className="border-t border-line bg-surface px-5 py-3 flex items-center justify-between text-[12px]">
+        <span className="text-muted">30 prompts · 4 platforms · pulled live</span>
+        <span className="text-oxblood font-medium">Top 3 own 100% of recommendations</span>
       </div>
     </div>
   );
@@ -64,7 +74,7 @@ function RowCells({
   const baseDelay = reduce ? 0 : 0.15 + ri * 0.12;
   return (
     <>
-      <span className={`truncate ${isYou ? "text-violet font-medium" : "text-navy font-medium"}`}>
+      <span className={`truncate font-medium ${isYou ? "text-oxblood" : "text-ink"}`}>
         {row.name}
       </span>
       {row.results.map((v, i) => (
@@ -76,22 +86,26 @@ function RowCells({
           className="flex justify-center"
         >
           {v ? (
-            <Check className="h-4 w-4 text-violet" aria-label="appears" />
+            <Check className="h-4 w-4 text-oxblood" aria-label="appears" />
           ) : (
-            <X className="h-4 w-4 text-slate-muted/50" aria-label="absent" />
+            <X className="h-4 w-4 text-muted" aria-label="absent" />
           )}
         </motion.span>
       ))}
       <div className="flex items-center justify-end gap-2 pl-2 min-w-[88px]">
-        <div className="h-1.5 w-14 rounded-full bg-white/[0.04] overflow-hidden">
+        <div className="h-1.5 w-14 rounded-full bg-surface overflow-hidden">
           <motion.div
             initial={reduce ? false : { width: 0 }}
             animate={inView ? { width: `${row.rate}%` } : {}}
             transition={{ duration: 0.7, delay: baseDelay + 0.2, ease: "easeOut" }}
-            className={`h-full rounded-full ${isYou ? "bg-slate-muted" : "bg-violet"}`}
+            className={`h-full rounded-full ${isYou ? "bg-muted" : "bg-oxblood"}`}
           />
         </div>
-        <span className={`text-[12.5px] font-mono tabular-nums w-7 text-right ${isYou ? "text-slate-muted" : "text-navy"}`}>
+        <span
+          className={`text-[12.5px] font-mono tabular-nums w-7 text-right ${
+            isYou ? "text-muted" : "text-ink"
+          }`}
+        >
           {row.rate}
         </span>
       </div>

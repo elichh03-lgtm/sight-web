@@ -1,80 +1,61 @@
 "use client";
 import { motion, useReducedMotion, type Variants } from "framer-motion";
-import { ReactNode } from "react";
+import { reveal, revealSmall, revealDisplay, revealHero, stagger } from "@/lib/motion";
 
-const variants: Variants = {
-  hidden: { opacity: 0, y: 20 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.4, ease: "easeOut" } },
+type Kind = "small" | "default" | "display" | "hero" | "stagger";
+
+const map: Record<Kind, Variants> = {
+  small: revealSmall,
+  default: reveal,
+  display: revealDisplay,
+  hero: revealHero,
+  stagger,
+};
+
+type Props = {
+  kind?: Kind;
+  as?: any;
+  amount?: number;
+  once?: boolean;
+  className?: string;
+  children: React.ReactNode;
+  /** If true, do not trigger on own viewport — inherit from a parent variants scope. */
+  child?: boolean;
 };
 
 export function Reveal({
-  children,
-  delay = 0,
+  kind = "default",
+  as: As = "div",
+  amount = 0.2,
+  once = true,
   className,
-  as = "div",
-}: {
-  children: ReactNode;
-  delay?: number;
-  className?: string;
-  as?: "div" | "section" | "li" | "article";
-}) {
-  const reduce = useReducedMotion();
-  const MotionTag = motion[as] as typeof motion.div;
-  if (reduce) return <MotionTag className={className}>{children}</MotionTag>;
+  children,
+  child = false,
+}: Props) {
+  const reduced = useReducedMotion();
+  if (reduced) {
+    const Plain: any = As;
+    return <Plain className={className}>{children}</Plain>;
+  }
+  const MotionAs = motion(As);
+
+  if (child) {
+    return (
+      <MotionAs className={className} variants={map[kind]}>
+        {children}
+      </MotionAs>
+    );
+  }
+
   return (
-    <MotionTag
+    <MotionAs
       className={className}
+      variants={map[kind]}
       initial="hidden"
-      whileInView="show"
-      viewport={{ once: true, margin: "-60px" }}
-      transition={{ delay }}
-      variants={variants}
+      whileInView="visible"
+      viewport={{ once, amount, margin: "0px 0px -10% 0px" }}
     >
       {children}
-    </MotionTag>
-  );
-}
-
-export function Stagger({
-  children,
-  className,
-  step = 0.1,
-}: {
-  children: ReactNode;
-  className?: string;
-  step?: number;
-}) {
-  const reduce = useReducedMotion();
-  if (reduce) return <div className={className}>{children}</div>;
-  return (
-    <motion.div
-      className={className}
-      initial="hidden"
-      whileInView="show"
-      viewport={{ once: true, margin: "-60px" }}
-      variants={{
-        hidden: {},
-        show: { transition: { staggerChildren: step, delayChildren: 0.05 } },
-      }}
-    >
-      {children}
-    </motion.div>
-  );
-}
-
-export function StaggerItem({
-  children,
-  className,
-  as = "div",
-}: {
-  children: ReactNode;
-  className?: string;
-  as?: "div" | "li" | "article";
-}) {
-  const MotionTag = motion[as] as typeof motion.div;
-  return (
-    <MotionTag className={className} variants={variants}>
-      {children}
-    </MotionTag>
+    </MotionAs>
   );
 }

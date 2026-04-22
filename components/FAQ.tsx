@@ -34,22 +34,24 @@ export function FAQ() {
   const reduce = useReducedMotion();
   const [open, setOpen] = useState<number | null>(0);
   return (
-    <ul className="divide-y divide-slate-line border-y border-slate-line">
+    <ul className="divide-y divide-line border-y border-line">
       {ITEMS.map((item, i) => {
         const isOpen = open === i;
         return (
-          <li key={item.q}>
+          <li key={item.q} className={isOpen ? "bg-surface" : ""}>
             <button
               type="button"
               aria-expanded={isOpen}
               onClick={() => setOpen(isOpen ? null : i)}
-              className="w-full flex items-start gap-4 py-5 text-left group"
+              className="w-full flex items-start gap-4 py-6 px-1 text-left"
             >
-              <span className="flex-1 text-[17px] sm:text-[18px] font-medium text-navy">{item.q}</span>
+              <span className="flex-1 text-[17px] sm:text-[18px] font-medium text-ink">
+                {item.q}
+              </span>
               <motion.span
                 animate={{ rotate: isOpen ? 45 : 0 }}
                 transition={{ duration: reduce ? 0 : 0.2, ease: "easeOut" }}
-                className="mt-1 inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-slate-line text-slate-muted group-hover:text-violet group-hover:border-violet/40 transition-colors"
+                className="mt-1 inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-line text-ink"
               >
                 <Plus className="h-4 w-4" aria-hidden="true" />
               </motion.span>
@@ -64,7 +66,7 @@ export function FAQ() {
                   transition={{ duration: 0.28, ease: "easeOut" }}
                   className="overflow-hidden"
                 >
-                  <p className="pb-6 pr-12 text-[15.5px] leading-[1.65] text-slate-body max-w-3xl">
+                  <p className="pb-6 pr-12 px-1 text-[15.5px] leading-[1.65] text-muted max-w-3xl">
                     {item.a}
                   </p>
                 </motion.div>
